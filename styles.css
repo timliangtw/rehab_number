@@ -1,0 +1,318 @@
+* {
+    box-sizing: border-box;
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    color: #FFFFFF;
+    font-family: sans-serif;
+    overflow: hidden;
+    /* Prevent scrolling */
+    touch-action: none;
+    /* Prevent pinch zoom & default gestures */
+    user-select: none;
+    /* Prevent text selection */
+}
+
+#app-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.view {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Left Anchor Line */
+#left-anchor-line {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 10px;
+    height: 100%;
+    background-color: #FF0000;
+    z-index: 10;
+}
+
+.vibrate-animation {
+    animation: vibrate 0.2s infinite linear;
+}
+
+@keyframes vibrate {
+    0% {
+        transform: translate(0);
+    }
+
+    20% {
+        transform: translate(-3px, 0);
+    }
+
+    40% {
+        transform: translate(3px, 0);
+    }
+
+    60% {
+        transform: translate(-3px, 0);
+    }
+
+    80% {
+        transform: translate(3px, 0);
+    }
+
+    100% {
+        transform: translate(0);
+    }
+}
+
+/* Game View Layout */
+#game-view {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding-left: 20px;
+    /* Space for anchor line */
+}
+
+.game-column {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+#center-gap {
+    width: 40px;
+    /* Physical gap between left and right */
+    height: 100%;
+    border-left: 2px dashed #333;
+    /* Optional slight visual separator in gap */
+}
+
+/* SVG Grids */
+.grid-container {
+    width: 45vh;
+    /* Responsive strictly based on height to fit */
+    height: 45vh;
+    min-width: 300px;
+    min-height: 300px;
+}
+
+svg.game-grid {
+    width: 100%;
+    height: 100%;
+}
+
+.svg-cell rect {
+    fill: #333333;
+    stroke: #FFFFFF;
+    stroke-width: 4;
+    cursor: pointer;
+}
+
+.svg-cell text {
+    fill: #FFFF00;
+    font-size: 56px;
+    font-weight: bold;
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+    /* Let rect handle clicks */
+}
+
+/* Animations for left neglect */
+.svg-cell.glow rect {
+    animation: svg-breathing-glow 1.5s infinite ease-in-out;
+}
+
+@keyframes svg-breathing-glow {
+    0% {
+        fill: #333333;
+        stroke: #ffaa00;
+        stroke-width: 4;
+    }
+
+    50% {
+        fill: #665511;
+        stroke: #ffaa00;
+        stroke-width: 8;
+    }
+
+    100% {
+        fill: #333333;
+        stroke: #ffaa00;
+        stroke-width: 4;
+    }
+}
+
+.svg-cell.error-flash rect {
+    animation: svg-flash-red 0.5s ease;
+}
+
+@keyframes svg-flash-red {
+    0% {
+        fill: #333333;
+    }
+
+    25% {
+        fill: #FF0000;
+        stroke: #FF0000;
+    }
+
+    50% {
+        fill: #333333;
+    }
+
+    75% {
+        fill: #FF0000;
+        stroke: #FF0000;
+    }
+
+    100% {
+        fill: #333333;
+    }
+}
+
+/* Numpad Popup */
+#numpad-popup {
+    display: flex;
+    /* overridden by .hidden if active */
+    align-items: center;
+    justify-content: center;
+}
+
+.numpad-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+}
+
+.numpad-content {
+    position: relative;
+    z-index: 101;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.numpad-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.numpad-btn {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background-color: #333333;
+    border: 4px solid #FFFFFF;
+    color: #FFFF00;
+    font-size: 48px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.numpad-btn:active {
+    background-color: #555555;
+    transform: scale(0.95);
+}
+
+.big-btn {
+    padding: 15px 40px;
+    font-size: 32px;
+    background-color: #009900;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.big-btn:disabled {
+    background-color: #555555;
+    color: #aaaaaa;
+    cursor: not-allowed;
+}
+
+.big-btn:not(:disabled):active {
+    background-color: #007700;
+}
+
+/* Reward Overlay */
+#reward-overlay {
+    display: flex;
+    /* Overridden by hidden */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 200;
+}
+
+#reward-overlay:not(.hidden) {
+    animation: fadeIn 1s forwards;
+}
+
+#reward-image {
+    width: 60vh;
+    height: 60vh;
+    object-fit: contain;
+    margin-bottom: 20px;
+}
+
+#reward-text {
+    font-size: 64px;
+    color: #FF00DD;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px #000;
+    text-align: center;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Dashboard Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #FFFFFF;
+    padding: 8px;
+    text-align: center;
+    font-size: 24px;
+}
+
+th {
+    background-color: #333;
+}

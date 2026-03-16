@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>格狀重建</title>
+
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" type="image/png" href="./icon-192.png">
+
+    <link rel="stylesheet" href="https://pyscript.net/releases/2023.11.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2023.11.1/core.js"></script>
+
+    <link rel="stylesheet" href="./styles.css">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(registration => {
+                    console.log('SW registered: ', registration);
+                }).catch(registrationError => {
+                    console.log('SW registration failed: ', registrationError);
+                });
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div id="app-container">
+        <!-- Dashboard / History View -->
+        <div id="dashboard" class="view">
+            <h2 style="color: yellow; text-align: center;">復健紀錄 (過去 7 天)</h2>
+            <div id="chart-container"
+                style="color: white; margin: 20px auto; width: 80%; border: 1px solid white; padding: 10px; min-height: 200px;">
+                <!-- Stats will be loaded here -->
+            </div>
+            <div style="text-align: center;">
+                <button id="btn-start" class="big-btn" disabled>系統載入中... (Loading...)</button>
+            </div>
+        </div>
+
+        <!-- Main Game View -->
+        <div id="game-view" class="view hidden">
+            <div id="left-anchor-line"></div>
+
+            <div id="left-reference" class="game-column">
+                <div id="target-grid" class="grid-container"></div>
+            </div>
+
+            <div id="center-gap"></div>
+
+            <div id="right-operation" class="game-column">
+                <div id="user-grid" class="grid-container"></div>
+            </div>
+        </div>
+
+        <!-- Number Pad Popup -->
+        <div id="numpad-popup" class="hidden">
+            <div class="numpad-overlay"></div>
+            <div class="numpad-content">
+                <div class="numpad-grid">
+                    <!-- Buttons 1-9 generated dynamically -->
+                </div>
+                <button id="btn-numpad-close" class="big-btn" style="margin-top: 20px;">取消</button>
+            </div>
+        </div>
+
+        <!-- Reward Overlay -->
+        <div id="reward-overlay" class="hidden">
+            <img id="reward-image" src="./flower.png" alt="Flower">
+            <div id="reward-text">媽，妳好棒！這關過得真漂亮！</div>
+        </div>
+    </div>
+
+    <script type="py" src="./main.py" config='{"packages": []}'></script>
+</body>
+
+</html>
